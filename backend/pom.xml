@@ -11,8 +11,8 @@
 	<groupId>com.drblury</groupId>
 	<artifactId>shopkeeper</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>backend</name>
+	<description>Backend of Shopkeeper</description>
 
 	<properties>
 		<java.version>1.8</java.version>

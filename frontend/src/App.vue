@@ -6,16 +6,11 @@
       <router-link to="/multipage">Multipage</router-link> |
     </div>
 
-    <v-btn @click="loadDashboard" color="primary" dark>
-      load Dashboard...
-      <v-icon dark right>mdi-cached</v-icon>
-    </v-btn>
-    {{dashboard}}
-<!--
+
+
     <router-view class="view one" name="default"></router-view>
     <router-view class="view two" name="a"></router-view>
     <router-view class="view three" name="b"></router-view>
-    -->
   </v-app>
 </template>
 
@@ -26,7 +21,6 @@ export default {
   data () {
     return {
       dashboard: {},
-      person: {name: "Julian", age: "21"}
     }
   },
   methods: {
