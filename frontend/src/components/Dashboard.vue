@@ -1,15 +1,6 @@
 <template>
   <div class="dashboard">
     <!-- <img src="./../assets/logo.png"> -->
-
-    <h1><b>Shopkeeper</b></h1>
-    <h2>
-      Im Warenkorb: <v-chip :color="yellow"><b>{{ cartItems }}</b></v-chip>
-    </h2>
-
-
-
-
     <v-card>
       <v-card-title>
         <h2><b>Products</b></h2>
@@ -209,7 +200,7 @@
           <v-data-table
                   :headers="this.privateCartHeaders"
                   :items="this.cart"
-                  :search="search"
+                  :search="cartSearch"
                   :items-per-page="5"
                   class="elevation-1"
           >
@@ -254,6 +245,13 @@
       </div>
     </v-card>
 
+    <v-btn color="green" @click="checkout()">
+      <b> ({{ cartItems }}) Checkout →
+      <v-icon>
+        mdi-file-document
+      </v-icon>
+      </b>
+    </v-btn>
 
   </div>
 </template>
@@ -320,6 +318,7 @@
 
         ],
         product: {name: "", price: ""},
+        username: "",
         response: "",
         errors: [],
         search: "",
@@ -327,6 +326,16 @@
         businessCustomer: false,
     }},
     methods: {
+      checkout () {
+        Vue.axios.get(`/api/generateInvoice`, {
+          params: {}
+        }).then(response => {
+          // JSON responses are automatically parsed.
+          this.response = response.data;
+        }).catch(e => {
+          this.errors.push(e)
+        })
+      },
       getAllPrivateNetto (cart) {
         var sum = 0;
         for (var i = 0; i < cart.length; i++) {
@@ -363,8 +372,8 @@
         }
       },
       addProduct (itemToAdd) {
-        this.cartItems++;
         var alreadyAdded = false;
+        //Add the item to cart at the frontend
         for (var i = 0; i < this.cart.length; i++) {
           if (this.cart[i].id == itemToAdd.id) {
             this.cart[i].amount++;
@@ -374,6 +383,22 @@
         if (!alreadyAdded) {
           this.cart.push({id: itemToAdd.id, amount: 1})
         }
+        this.cartItems++;
+
+        Vue.axios.get(`/api/addToCart`, {
+          params: {
+            id : itemToAdd.id,
+            username: this.username,
+          }
+        }).then(response => {
+          // JSON responses are automatically parsed.
+          console.log(response.data)
+          this.response = response.data;
+        }).catch(e => {
+          this.errors.push(e)
+        })
+
+
       },
       removeProduct (itemToRemove) {
         for (var i = 0; i < this.cart.length; i++) {
@@ -392,7 +417,7 @@
         else return 'green'
       },
       reloadTable () {
-        Vue.axios.get(`/excelreader/getFromExcel`)
+        Vue.axios.get(`/api/getProducts`)
           .then(response => {
             // JSON responses are automatically parsed.
             this.response = response.data;

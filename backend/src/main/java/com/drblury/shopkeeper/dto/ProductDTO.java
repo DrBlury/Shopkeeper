@@ -26,11 +26,11 @@ public class ProductDTO {
     private String comment;
     private Integer stock;
     private Integer tags;
-    private double brutto;
-    private double businessCustomerNetto;
-    private double privateCustomerNetto;
-    private double privateCustomerBrutto;
-    private double businessCustomerBrutto;
+    private Double businessCustomerNetto;
+    private Double privateCustomerNetto;
+    private Double privateCustomerBrutto;
+    private Double businessCustomerBrutto;
+
 
     @Override
     public String toString() {
@@ -46,7 +46,6 @@ public class ProductDTO {
                 ", comment='" + comment + '\'' +
                 ", stock=" + stock +
                 ", tags=" + tags +
-                ", brutto=" + brutto +
                 ", businessCustomerNetto=" + businessCustomerNetto +
                 ", privateCustomerNetto=" + privateCustomerNetto +
                 ", privateCustomerBrutto=" + privateCustomerBrutto +
@@ -142,43 +141,35 @@ public class ProductDTO {
         this.tags = tags;
     }
 
-    public double getBrutto() {
-        return brutto;
-    }
-
-    public void setBrutto(double brutto) {
-        this.brutto = brutto;
-    }
-
-    public double getBusinessCustomerNetto() {
+    public Double getBusinessCustomerNetto() {
         return businessCustomerNetto;
     }
 
-    public void setBusinessCustomerNetto(double businessCustomerNetto) {
+    public void setBusinessCustomerNetto(Double businessCustomerNetto) {
         this.businessCustomerNetto = businessCustomerNetto;
     }
 
-    public double getPrivateCustomerNetto() {
+    public Double getPrivateCustomerNetto() {
         return privateCustomerNetto;
     }
 
-    public void setPrivateCustomerNetto(double privateCustomerNetto) {
+    public void setPrivateCustomerNetto(Double privateCustomerNetto) {
         this.privateCustomerNetto = privateCustomerNetto;
     }
 
-    public double getPrivateCustomerBrutto() {
+    public Double getPrivateCustomerBrutto() {
         return privateCustomerBrutto;
     }
 
-    public void setPrivateCustomerBrutto(double privateCustomerBrutto) {
+    public void setPrivateCustomerBrutto(Double privateCustomerBrutto) {
         this.privateCustomerBrutto = privateCustomerBrutto;
     }
 
-    public double getBusinessCustomerBrutto() {
+    public Double getBusinessCustomerBrutto() {
         return businessCustomerBrutto;
     }
 
-    public void setBusinessCustomerBrutto(double businessCustomerBrutto) {
+    public void setBusinessCustomerBrutto(Double businessCustomerBrutto) {
         this.businessCustomerBrutto = businessCustomerBrutto;
     }
 }

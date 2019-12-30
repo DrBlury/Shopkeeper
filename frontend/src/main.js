@@ -9,6 +9,7 @@ Vue.use(VueAxios, axios);
 axios.defaults.baseURL = "http://localhost:8090";
 axios.defaults.headers.common['Accept'] = "application/json";
 
+
 // Add Vuetify to the Project
 import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.css'

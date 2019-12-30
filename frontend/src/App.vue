@@ -1,9 +1,11 @@
 <template>
   <v-app id="app" theme="dark">
+    <h1><b>Shopkeeper</b></h1>
     <div id="nav">
-      <router-link to="/">Dashboard</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/multipage">Multipage</router-link> |
+      <router-link to="/"><v-btn color="blue"><b>Products</b></v-btn></router-link> |
+      <router-link to="/cart"><v-btn color="green"><b>Cart</b></v-btn></router-link> |
+      <router-link to="/multipage"><b><v-btn color="red" @click="newCart()"><b>New Cart</b></v-btn></b></router-link> |
+      <v-btn color="yellow" @click=""><b>Change customer</b></v-btn>
     </div>
 
     <router-view class="view one" name="default"></router-view>

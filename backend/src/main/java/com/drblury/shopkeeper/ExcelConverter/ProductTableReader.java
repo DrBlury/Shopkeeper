@@ -37,6 +37,9 @@ public class ProductTableReader {
         AtomicInteger counter = new AtomicInteger(0);
         for (final Map.Entry<Integer, List<Cell>> entry : table.entrySet()) {
             if (entry.getKey() > 0) {
+                if (entry.getValue().get(1).getStringCellValue().equals("")){
+                    return productList;
+                }
                 productList.add (Product.builder()
                         .id(counter.incrementAndGet())
                         .producer(entry.getValue().get(0).toString())

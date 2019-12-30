@@ -22,7 +22,7 @@ public class Product {
     private Integer stock;
     private Integer tags;
 
-    public double getBrutto(double nettoPrice) {
+    private double getBrutto(double nettoPrice) {
         return nettoPrice * 1.19;
     }
 
