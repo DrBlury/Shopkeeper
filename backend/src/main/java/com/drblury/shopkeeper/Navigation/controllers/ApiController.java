@@ -13,6 +13,7 @@ import com.drblury.shopkeeper.model.Product;
 import com.drblury.shopkeeper.repos.ProductDTORepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.sun.xml.fastinfoset.util.StringArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,28 @@ public class ApiController {
         log.info(content);
         return content;
     }
+
+    /////////////////////////////////
+    // CODE COMPLETELY UNTESTED. IDE BROKE ???
+    /////////////////////////////////
+    @RequestMapping("/getCart")
+    public ShoppingCart getCart(@RequestParam(value= "username") String username) {
+        //shoppingCartList.stream()
+        //        .filter(cart -> cart.getUsername() == username)
+        //        .ifPresent(cart -> return cart)
+        //Optional.ofNullable(shoppingCartList)
+    }
+
+    @RequestMapping("/getCartList")
+    public List<String> getCartList() {
+        //List<String> openCarts = new ArrayList<>();
+        //for (String openCart : shoppingCartList) {
+        //    openCarts.add(openCart);
+        //}
+        //return openCarts;
+    }
+    // UNTIL HERE
+    /////////////////////////////////
 
 
     //TODO make this endpoint decide on new sum of items. Add or remove an item? Maybe via parameter
