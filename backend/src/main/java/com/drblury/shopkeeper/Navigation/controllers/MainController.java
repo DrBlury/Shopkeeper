@@ -1,4 +1,4 @@
-package com.drblury.shopkeeper.Navigation.Controllers;
+package com.drblury.shopkeeper.Navigation.controllers;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import com.drblury.shopkeeper.model.Product;
 import com.drblury.shopkeeper.ExcelConverter.ProductTableReader;
 
 @RestController
-public class maincontroller {
+public class MainController {
 
     @RequestMapping(name = "/home")
     public List<Product> home() throws IOException {

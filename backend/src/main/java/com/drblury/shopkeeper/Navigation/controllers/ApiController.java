@@ -1,4 +1,4 @@
-package com.drblury.shopkeeper.Navigation.Controllers;
+package com.drblury.shopkeeper.Navigation.controllers;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.*;
 
 import com.drblury.shopkeeper.ExcelConverter.ProductTableReader;
-import com.drblury.shopkeeper.ExcelConverter.ReadFromExcel;
 import com.drblury.shopkeeper.dto.ProductDTO;
 import com.drblury.shopkeeper.dto.ShoppingCart;
 import com.drblury.shopkeeper.mapper.ProductToProductDTOMapper;
@@ -31,14 +30,14 @@ import com.drblury.shopkeeper.repos.BookRepository;
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-public class TestController {
+public class ApiController {
 
 
 
     @Value("classpath:Dashboard.vue")
     private Resource dashboardVue;
 
-    Logger log = LoggerFactory.getLogger(TestController.class);
+    Logger log = LoggerFactory.getLogger(ApiController.class);
 
     @Autowired
     BookRepository bookRepository;
