@@ -1,12 +1,10 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" theme="dark">
     <div id="nav">
       <router-link to="/">Dashboard</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/multipage">Multipage</router-link> |
     </div>
-
-
 
     <router-view class="view one" name="default"></router-view>
     <router-view class="view two" name="a"></router-view>

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.drblury.shopkeeper.entities.Product;
+import com.drblury.shopkeeper.model.Product;
 
 import com.drblury.shopkeeper.ExcelConverter.ProductTableReader;
 
