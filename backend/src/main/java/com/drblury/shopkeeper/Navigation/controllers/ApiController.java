@@ -65,28 +65,22 @@ public class ApiController {
         return content;
     }
 
-    /////////////////////////////////
-    // CODE COMPLETELY UNTESTED. IDE BROKE ???
-    /////////////////////////////////
     @RequestMapping("/getCart")
     public ShoppingCart getCart(@RequestParam(value= "username") String username) {
-        //shoppingCartList.stream()
-        //        .filter(cart -> cart.getUsername() == username)
-        //        .ifPresent(cart -> return cart)
-        //Optional.ofNullable(shoppingCartList)
+        return shoppingCartList.stream()
+                .filter(c -> c.getUsername().equals(username))
+                .findAny()
+                .orElse(null);
     }
 
     @RequestMapping("/getCartList")
     public List<String> getCartList() {
-        //List<String> openCarts = new ArrayList<>();
-        //for (String openCart : shoppingCartList) {
-        //    openCarts.add(openCart);
-        //}
-        //return openCarts;
+        List<String> openCarts = new ArrayList<>();
+        for (ShoppingCart openCart : shoppingCartList) {
+            openCarts.add(openCart.getUsername());
+        }
+        return openCarts;
     }
-    // UNTIL HERE
-    /////////////////////////////////
-
 
     //TODO make this endpoint decide on new sum of items. Add or remove an item? Maybe via parameter
     @RequestMapping("/addToCart")
