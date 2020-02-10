@@ -18,19 +18,19 @@
                 class="elevation-1"
         >
           <template v-slot:item.productName="{ item }">
-            <b> {{ findById(item.id).productName }} </b>
+            <b> {{ item.item.productName }} </b>
           </template>
 
           <template v-slot:item.producer="{ item }">
-            <b> {{ findById(item.id).producer }} </b>
+            <b> {{ item.item.producer }} </b>
           </template>
 
           <template v-slot:item.businessCustomerBrutto="{ item }">
-            <v-chip color="green lighten-1">{{ findById(item.id).businessCustomerBrutto }} €</v-chip>
+            <v-chip color="green lighten-1">{{ item.item.businessCustomerBrutto }} €</v-chip>
           </template>
 
           <template v-slot:item.businessCustomerNetto="{ item }">
-            <v-chip color="green lighten-3">{{ findById(item.id).businessCustomerNetto }} €</v-chip>
+            <v-chip color="green lighten-3">{{ item.item.businessCustomerNetto }} €</v-chip>
           </template>
 
           <template v-slot:item.amount="{ item }">
@@ -38,8 +38,8 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item.id, 'remove')"> remove </v-icon>
-            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
+            <v-icon @click="modifyCartItem(item.item, 'remove')"> remove </v-icon>
+            <v-icon @click="modifyCartItem(item.item, 'add')"> add </v-icon>
           </template>
         </v-data-table>
       </v-card>
@@ -63,19 +63,19 @@
                 class="elevation-1"
         >
           <template v-slot:item.productName="{ item }">
-            <b> {{ findById(item.id).productName }} </b>
+            <b> {{ item.item.productName }} </b>
           </template>
 
           <template v-slot:item.producer="{ item }">
-            <b> {{ findById(item.id).producer }} </b>
+            <b> {{ item.item.producer }} </b>
           </template>
 
           <template v-slot:item.privateCustomerBrutto="{ item }">
-            <v-chip color="blue lighten-1">{{ findById(item.id).privateCustomerBrutto }} €</v-chip>
+            <v-chip color="blue lighten-1">{{ item.item.privateCustomerBrutto }} €</v-chip>
           </template>
 
           <template v-slot:item.privateCustomerNetto="{ item }">
-            <v-chip color="blue lighten-3">{{ findById(item.id).privateCustomerNetto }} €</v-chip>
+            <v-chip color="blue lighten-3">{{ item.item.privateCustomerNetto }} €</v-chip>
           </template>
 
           <template v-slot:item.amount="{ item }">
@@ -83,8 +83,8 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item.id, 'remove')"> remove </v-icon>
-            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
+            <v-icon @click="modifyCartItem(item.item, 'remove')"> remove </v-icon>
+            <v-icon @click="modifyCartItem(item.item, 'add')"> add </v-icon>
           </template>
         </v-data-table>
 
@@ -129,14 +129,6 @@
         cartSearch: "",
     }},
     methods: {
-      findById (id) {
-        console.log("seaching by id:" + id);
-        for (var i = 0; i < this.products.length; i++) {
-          if (this.products[i].id === id) {
-            return this.products[i];
-          }
-        }
-      },
       checkout () {
         Vue.axios.get(`/api/generateInvoice`, {
           params: {}
@@ -160,28 +152,28 @@
       getAllPrivateNetto (cart) {
         var sum = 0;
         for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).privateCustomerNetto * cart[i].amount;
+          sum += cart[i].item.privateCustomerNetto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllPrivateBrutto (cart) {
         var sum = 0;
         for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).privateCustomerBrutto * cart[i].amount;
+          sum += cart[i].item.privateCustomerBrutto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllBusinessNetto (cart) {
         var sum = 0;
         for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).businessCustomerNetto * cart[i].amount;
+          sum += cart[i].item.businessCustomerNetto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllBusinessBrutto (cart) {
         var sum = 0;
         for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).businessCustomerBrutto * cart[i].amount;
+          sum += cart[i].item.businessCustomerBrutto * cart[i].amount;
         }
         return sum.toFixed(2);
       },

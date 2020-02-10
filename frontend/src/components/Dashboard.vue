@@ -45,7 +45,7 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-              <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
+              <v-icon @click="modifyCartItem(item, 'add')"> add </v-icon>
           </template>
 
         </v-data-table>
@@ -79,7 +79,7 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
+            <v-icon @click="modifyCartItem(item, 'add')"> add </v-icon>
           </template>
 
         </v-data-table>
@@ -127,13 +127,7 @@
         cartSearch: "",
     }},
     methods: {
-      findById (id) {
-        for (var i = 0; i < this.products.length; i++) {
-          if (this.products[i].id == id) {
-            return this.products[i];
-          }
-        }
-      },
+
       modifyCartItem (item, operation) {
         this.$store.commit(
                 'modifyCartItem',

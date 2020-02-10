@@ -48,29 +48,33 @@ const store = new Vuex.Store({
         changeCustomerType (state) {
             state.businessCustomer = !state.businessCustomer;
         },
-        modifyCartItem (state, itemToAdd, username, operation) {
+        modifyCartItem (state, change) {
             var alreadyAdded = false;
             state.cartItems++;
             //Add the item to cart at the frontend
             for (var i = 0; i < state.cart.length; i++) {
-                if (state.cart[i].id == itemToAdd.id) {
-                    if (operation === "add") {
+                if (state.cart[i].item.id === change.item.id) {
+                    if (change.operation === "add") {
                         state.cart[i].amount++;
                     } else {
                         state.cart[i].amount--;
+                        if (state.cart[i].amount <= 0) {
+                            state.cart.splice(i, 1);
+                        }
                     }
                     alreadyAdded = true;
+                    continue;
                 }
             }
             if (!alreadyAdded) {
-                state.cart.push({id: itemToAdd.id, amount: 1})
+                state.cart.push({item: change.item, amount: 1});
             }
 
             Vue.axios.get(`/api/modifyCart`, {
                 params: {
-                    id : itemToAdd.id,
-                    username: username,
-                    operation: operation,
+                    id : change.item.id,
+                    username: change.username,
+                    operation: change.operation,
                 }
             }).then(response => {
                 // JSON responses are automatically parsed.
