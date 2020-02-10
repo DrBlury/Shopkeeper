@@ -50,14 +50,16 @@ const store = new Vuex.Store({
         },
         modifyCartItem (state, change) {
             var alreadyAdded = false;
-            state.cartItems++;
+
             //Add the item to cart at the frontend
             for (var i = 0; i < state.cart.length; i++) {
                 if (state.cart[i].item.id === change.item.id) {
                     if (change.operation === "add") {
                         state.cart[i].amount++;
+                        state.cartItems++;
                     } else {
                         state.cart[i].amount--;
+                        state.cartItems--;
                         if (state.cart[i].amount <= 0) {
                             state.cart.splice(i, 1);
                         }
