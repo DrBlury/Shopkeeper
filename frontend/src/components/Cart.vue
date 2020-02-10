@@ -1,6 +1,6 @@
 <template>
   <div class="cart">
-    <div v-if='businessCustomer'>
+    <div v-if='this.$store.businessCustomer'>
       <v-card>
         <v-card-title>
           <h2><b>Business Customer Cart</b></h2>
@@ -18,11 +18,6 @@
                   single-line
                   hide-details
           ></v-text-field>
-
-          <v-checkbox
-                  v-model="businessCustomer"
-                  :label="`Business customer`"
-          ></v-checkbox>
         </v-card-title>
 
         <v-data-table
@@ -82,10 +77,6 @@
                   hide-details
           ></v-text-field>
 
-          <v-checkbox
-                  v-model="businessCustomer"
-                  :label="`Business customer`"
-          ></v-checkbox>
         </v-card-title>
 
         <v-data-table
@@ -135,10 +126,7 @@
   export default {
     data() {
       return {
-        cart: [],
-        cartItems: 0,
         cartSearch: "",
-        products: [],
         privateCartHeaders: [
           { text: 'Producer', value: 'producer' },
           {
@@ -165,13 +153,9 @@
           { text: 'Amount', value: 'amount' },
           { text: 'Action', value: 'action' },
         ],
-        product: {name: "", price: ""},
-        username: "",
         response: "",
         errors: [],
-        search: "",
         cartSearch: "",
-        businessCustomer: false,
     }},
     methods: {
       checkout () {
@@ -220,37 +204,32 @@
         }
       },
       removeProduct (itemToRemove) {
-        for (var i = 0; i < this.cart.length; i++) {
-          if (this.cart[i].id == itemToRemove.id) {
-            this.cart[i].amount--;
-            this.cartItems--;
-            if (this.cart[i].amount <= 0) {
-              this.cart.splice(i, 1);
-            }
-          }
-        }
+        this.$store.commit('removeCartItem', itemToRemove);
       },
       getColor (stock) {
         if (stock > 5) return 'red'
         else if (stock > 10) return 'orange'
         else return 'green'
       },
-      reloadTable () {
-        Vue.axios.get(`/api/getProducts`)
-          .then(response => {
-            // JSON responses are automatically parsed.
-            this.response = response.data;
-            this.products = response.data;
-          }).catch(e => {
-            this.errors.push(e)
-          })
-      },
       event () {
         this.$eventHub.$emit('change');
       },
     },
     beforeMount() {
-      this.reloadTable();
+    },
+    computed: {
+      businessCustomer () {
+        return this.$store.state.businessCustomer
+      },
+      cart () {
+        return this.$store.state.cart
+      },
+      cartItems () {
+        return this.$store.state.cartItems
+      },
+      products () {
+        return this.$store.state.products
+      },
     }
   }
 </script>

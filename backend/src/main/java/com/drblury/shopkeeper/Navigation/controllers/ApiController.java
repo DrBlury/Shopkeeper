@@ -33,37 +33,15 @@ import com.drblury.shopkeeper.repos.BookRepository;
 @RequestMapping("/api")
 public class ApiController {
 
-
-
-    @Value("classpath:Dashboard.vue")
-    private Resource dashboardVue;
-
     Logger log = LoggerFactory.getLogger(ApiController.class);
 
     @Autowired
-    BookRepository bookRepository;
+    ProductTableReader productTableReader;
 
     @Autowired
     ProductDTORepository productDTORepository;
 
     private List<ShoppingCart> shoppingCartList = new ArrayList<>();
-
-    @RequestMapping("/addBook")
-    public void addBook( @RequestParam(value= "book") String transferBook)
-    throws IOException {
-        final Book book = new ObjectMapper().readValue(transferBook, Book.class);
-        bookRepository.save(book);
-        bookRepository.findAll().forEach(x ->log.info(x.toString()));
-    }
-
-    @RequestMapping("/loadDashboardVue")
-    public String loadDashboardVue() throws IOException {
-        ClassLoader classLoader = DemoApplication.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource("Dashboard.vue")).getFile());
-        String content = new String(Files.readAllBytes(file.toPath()));
-        log.info(content);
-        return content;
-    }
 
     @RequestMapping("/getCart")
     public ShoppingCart getCart(@RequestParam(value= "username") String username) {
@@ -108,7 +86,7 @@ public class ApiController {
         return cart;
     }
 
-    private ProductDTO findProductById(String id) {
+    private ProductDTO findProductById(String id) throws IOException {
         for (ProductDTO productDTO : getProducts()) {
             if (productDTO.getId().toString().equals(id) ) {
                 return productDTO;
@@ -136,7 +114,7 @@ public class ApiController {
     }
 
     @RequestMapping("/getProducts")
-    public List<ProductDTO> getProducts() {
+    public List<ProductDTO> getProducts() throws IOException {
         if (productDTORepository.count() <= 0) {
             List<Product> productList = getFromExcel();
             for (Product product : productList) {
@@ -152,24 +130,14 @@ public class ApiController {
         return productDTOList;
     }
 
-    private List<Product> getFromExcel() {
-        List<Product> productList = ProductTableReader.read("C:\\Users\\Julian\\Documents\\GitHub\\Shopkeeper\\backend\\src\\main\\resources\\ExcelFiles\\pricing.xlsx");
+    private List<Product> getFromExcel() throws IOException {
+        List<Product> productList = productTableReader.read();
         return productList;
     }
 
     @RequestMapping("/generateInvoice")
     public String generateInvoice()  {
         return "done.";
-    }
-
-    @RequestMapping("/hello")
-    public List<Book> helloWorld() {
-        List<Book> bookList = new ArrayList<>();
-        for(Book book : bookRepository.findAll()) {
-            log.info("Found a book: " + book.toString());
-            bookList.add(book);
-        }
-        return bookList;
     }
 
     // Forwards all routes to FrontEnd except: '/', '/index.html', '/api', '/api/**'

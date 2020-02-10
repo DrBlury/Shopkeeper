@@ -3,29 +3,43 @@
     <h1><b>Shopkeeper</b></h1>
     <div id="nav">
       <router-link to="/">                <v-btn color="blue">  <b>Products</b>           </v-btn></router-link> |
-      <router-link to="/cart">            <v-btn color="green"> <b>Cart</b>               </v-btn></router-link> |
-      <router-link to="/newCustomer">     <v-btn color="red">   <b>Change customer</b>    </v-btn></router-link>
-    </div>
+      <router-link to="/cart">            <v-btn color="green"> <b>Cart {{ cartItems }}</b>               </v-btn></router-link> |
+      <router-link to="/newCustomer">     <v-btn color="red">   <b>Change customer</b>    </v-btn></router-link> |
 
+      <v-switch
+              v-model="businessCustomer"
+              :label="`Business customer:`"
+              @change="this.switchCustomerType"
+      ></v-switch>
+
+    </div>
     <router-view class="view one" name="default"></router-view>
-    <router-view class="view two" name="a"></router-view>
-    <router-view class="view three" name="b"></router-view>
   </v-app>
 </template>
 
 <script>
-  import Vue from 'vue'
+import Vue from 'vue'
 export default {
   name: 'app',
   data () {
     return {
-      dashboard: {},
     }
   },
   methods: {
   },
   created() {
     this.$eventHub.$on("change", this.test);
+  },
+  switchCustomerType () {
+    this.$store.commit('switchCustomerType')
+  },
+  computed: {
+    businessCustomer () {
+        return this.$store.state.businessCustomer
+    },
+    cartItems () {
+      return this.$store.state.cartItems
+    },
   }
 }
 </script>

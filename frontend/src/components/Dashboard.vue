@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <!-- <img src="./../assets/logo.png"> -->
+
     <v-card>
       <v-card-title>
         <h2><b>Products</b></h2>
@@ -13,14 +14,9 @@
                 single-line
                 hide-details
         ></v-text-field>
-
-        <v-checkbox
-                v-model="businessCustomer"
-                :label="`Business customer`"
-        ></v-checkbox>
       </v-card-title>
 
-      <div v-if='businessCustomer'>
+      <div v-if='this.businessCustomer'>
         <v-data-table
                 :headers="this.businessHeaders"
                 :items="this.products"
@@ -94,11 +90,6 @@
             >
               add
             </v-icon>
-            <v-icon
-                    @click="removeProduct(item)"
-            >
-              delete
-            </v-icon>
           </template>
 
         </v-data-table>
@@ -113,8 +104,6 @@
     data() {
       return {
         cart: [],
-        cartItems: 0,
-        products: [],
         businessHeaders: [
           { text: 'Producer', value: 'producer' },
           {
@@ -148,47 +137,8 @@
         errors: [],
         search: "",
         cartSearch: "",
-        businessCustomer: false,
     }},
     methods: {
-      checkout () {
-        Vue.axios.get(`/api/generateInvoice`, {
-          params: {}
-        }).then(response => {
-          // JSON responses are automatically parsed.
-          this.response = response.data;
-        }).catch(e => {
-          this.errors.push(e)
-        })
-      },
-      getAllPrivateNetto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).privateCustomerNetto * cart[i].amount;
-        }
-        return sum.toFixed(2);
-      },
-      getAllPrivateBrutto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).privateCustomerBrutto * cart[i].amount;
-        }
-        return sum.toFixed(2);
-      },
-      getAllBusinessNetto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).businessCustomerNetto * cart[i].amount;
-        }
-        return sum.toFixed(2);
-      },
-      getAllBusinessBrutto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
-          sum += this.findById(cart[i].id).businessCustomerBrutto * cart[i].amount;
-        }
-        return sum.toFixed(2);
-      },
       findById (id) {
         for (var i = 0; i < this.products.length; i++) {
           if (this.products[i].id == id) {
@@ -197,18 +147,7 @@
         }
       },
       addProduct (itemToAdd) {
-        var alreadyAdded = false;
-        //Add the item to cart at the frontend
-        for (var i = 0; i < this.cart.length; i++) {
-          if (this.cart[i].id == itemToAdd.id) {
-            this.cart[i].amount++;
-            alreadyAdded = true;
-          }
-        }
-        if (!alreadyAdded) {
-          this.cart.push({id: itemToAdd.id, amount: 1})
-        }
-        this.cartItems++;
+        this.$store.commit('addCartItem', itemToAdd);
 
         Vue.axios.get(`/api/addToCart`, {
           params: {
@@ -222,19 +161,6 @@
         }).catch(e => {
           this.errors.push(e)
         })
-
-
-      },
-      removeProduct (itemToRemove) {
-        for (var i = 0; i < this.cart.length; i++) {
-          if (this.cart[i].id == itemToRemove.id) {
-            this.cart[i].amount--;
-            this.cartItems--;
-            if (this.cart[i].amount <= 0) {
-              this.cart.splice(i, 1);
-            }
-          }
-        }
       },
       getColor (stock) {
         if (stock > 5) return 'red'
@@ -246,7 +172,7 @@
           .then(response => {
             // JSON responses are automatically parsed.
             this.response = response.data;
-            this.products = response.data;
+            this.$store.commit('setProducts', response.data);
           }).catch(e => {
             this.errors.push(e)
           })
@@ -254,22 +180,23 @@
       event () {
         this.$eventHub.$emit('change');
       },
-      sendToBackend () {
-        Vue.axios.get(`/api/addBook`, {
-          params: {
-            book: this.book
-          }
-        }).then(response => {
-          // JSON responses are automatically parsed.
-          this.response = response.data;
-          this.reloadTable();
-        }).catch(e => {
-          this.errors.push(e)
-        })
-      },
     },
     beforeMount() {
       this.reloadTable();
+    },
+    computed: {
+      count () {
+        return this.$store.state.count
+      },
+      businessCustomer () {
+        return this.$store.state.businessCustomer
+      },
+      products () {
+        return this.$store.state.products
+      },
+      businessCustomer () {
+        return this.$store.state.businessCustomer
+      },
     }
   }
 
