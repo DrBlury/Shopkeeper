@@ -2,10 +2,9 @@
   <v-app id="app" theme="dark">
     <h1><b>Shopkeeper</b></h1>
     <div id="nav">
-      <router-link to="/"><v-btn color="blue"><b>Products</b></v-btn></router-link> |
-      <router-link to="/cart"><v-btn color="green"><b>Cart</b></v-btn></router-link> |
-      <router-link to="/multipage"><b><v-btn color="red" @click="newCart()"><b>New Cart</b></v-btn></b></router-link> |
-      <v-btn color="yellow" @click=""><b>Change customer</b></v-btn>
+      <router-link to="/">                <v-btn color="blue">  <b>Products</b>           </v-btn></router-link> |
+      <router-link to="/cart">            <v-btn color="green"> <b>Cart</b>               </v-btn></router-link> |
+      <router-link to="/newCustomer">     <v-btn color="red">   <b>Change customer</b>    </v-btn></router-link>
     </div>
 
     <router-view class="view one" name="default"></router-view>
@@ -24,19 +23,6 @@ export default {
     }
   },
   methods: {
-    loadDashboard() {
-      Vue.axios.get(`/api/loadDashboardVue`)
-              .then(response => {
-                // JSON responses are automatically parsed.
-                this.dashboard = response.data;
-              }).catch(e => {
-        this.errors.push(e)
-      })
-    },
-    test() {
-      alert("worked.");
-      console.log("---> test");
-    },
   },
   created() {
     this.$eventHub.$on("change", this.test);

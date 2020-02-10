@@ -58,76 +58,6 @@
           </template>
 
         </v-data-table>
-
-        <v-card>
-          <v-card-title>
-            <h2><b>Cart</b></h2>
-
-            <v-spacer></v-spacer>
-            <b>All Brutto: {{ this.getAllBusinessBrutto(this.cart) }} €</b>
-            <v-spacer></v-spacer>
-            <b>All Netto: {{ this.getAllBusinessNetto(this.cart) }} €</b>
-
-            <v-spacer></v-spacer>
-            <v-text-field
-                    v-model="cartSearch"
-                    append-icon="search"
-                    label="Search"
-                    single-line
-                    hide-details
-            ></v-text-field>
-
-            <v-checkbox
-                    v-model="businessCustomer"
-                    :label="`Business customer`"
-            ></v-checkbox>
-          </v-card-title>
-
-          <v-data-table
-                  :headers="this.businessCartHeaders"
-                  :items="this.cart"
-                  :search="search"
-                  :items-per-page="5"
-                  class="elevation-1"
-          >
-            <template v-slot:item.productName="{ item }">
-              <b> {{ findById(item.id).productName }} </b>
-            </template>
-
-            <template v-slot:item.producer="{ item }">
-              <b> {{ findById(item.id).producer }} </b>
-            </template>
-
-            <template v-slot:item.businessCustomerBrutto="{ item }">
-              <v-chip color="green lighten-1">{{ findById(item.id).businessCustomerBrutto }} €</v-chip>
-            </template>
-
-            <template v-slot:item.businessCustomerNetto="{ item }">
-              <v-chip color="green lighten-3">{{ findById(item.id).businessCustomerNetto }} €</v-chip>
-            </template>
-
-            <template v-slot:item.amount="{ item }">
-              <v-chip>{{ item.amount }}</v-chip>
-            </template>
-
-            <template v-slot:item.action="{ item }">
-              <v-icon
-                      small
-                      class="mr-2"
-                      @click="addProduct(item)"
-              >
-                edit
-              </v-icon>
-              <v-icon
-                      small
-                      @click="removeProduct(item)"
-              >
-                delete
-              </v-icon>
-            </template>
-          </v-data-table>
-
-        </v-card>
       </div>
       <div v-else>
         <v-data-table
@@ -172,88 +102,9 @@
           </template>
 
         </v-data-table>
-
-        <v-card>
-          <v-card-title>
-            <h2><b>Cart</b></h2>
-
-            <v-spacer></v-spacer>
-            <b>All Brutto: {{ this.getAllPrivateBrutto(this.cart) }} €</b>
-            <v-spacer></v-spacer>
-            <b>All Netto: {{ this.getAllPrivateNetto(this.cart) }} €</b>
-
-            <v-spacer></v-spacer>
-            <v-text-field
-                    v-model="cartSearch"
-                    append-icon="search"
-                    label="Search"
-                    single-line
-                    hide-details
-            ></v-text-field>
-
-            <v-checkbox
-                    v-model="businessCustomer"
-                    :label="`Business customer`"
-            ></v-checkbox>
-          </v-card-title>
-
-          <v-data-table
-                  :headers="this.privateCartHeaders"
-                  :items="this.cart"
-                  :search="cartSearch"
-                  :items-per-page="5"
-                  class="elevation-1"
-          >
-            <template v-slot:item.productName="{ item }">
-              <b> {{ findById(item.id).productName }} </b>
-            </template>
-
-            <template v-slot:item.producer="{ item }">
-              <b> {{ findById(item.id).producer }} </b>
-            </template>
-
-            <template v-slot:item.privateCustomerBrutto="{ item }">
-              <v-chip color="blue lighten-1">{{ findById(item.id).privateCustomerBrutto }} €</v-chip>
-            </template>
-
-            <template v-slot:item.privateCustomerNetto="{ item }">
-              <v-chip color="blue lighten-3">{{ findById(item.id).privateCustomerNetto }} €</v-chip>
-            </template>
-
-            <template v-slot:item.amount="{ item }">
-              <v-chip>{{ item.amount }}</v-chip>
-            </template>
-
-            <template v-slot:item.action="{ item }">
-              <v-icon
-                      small
-                      class="mr-2"
-                      @click="addProduct(item)"
-              >
-                edit
-              </v-icon>
-              <v-icon
-                      small
-                      @click="removeProduct(item)"
-              >
-                delete
-              </v-icon>
-            </template>
-          </v-data-table>
-
-        </v-card>
-      </div>
-    </v-card>
-
-    <v-btn color="green" @click="checkout()">
-      <b> ({{ cartItems }}) Checkout →
-      <v-icon>
-        mdi-file-document
-      </v-icon>
-      </b>
-    </v-btn>
-
-  </div>
+       </div>
+     </v-card>
+   </div>
 </template>
 
 <script>
@@ -264,32 +115,6 @@
         cart: [],
         cartItems: 0,
         products: [],
-        privateCartHeaders: [
-          { text: 'Producer', value: 'producer' },
-          {
-            text: 'Product Title',
-            align: 'left',
-            sortable: false,
-            value: 'productName',
-          },
-          { text: 'Brutto', value: 'privateCustomerBrutto' },
-          { text: 'Netto', value: 'privateCustomerNetto' },
-          { text: 'Amount', value: 'amount' },
-          { text: 'Action', value: 'action' },
-        ],
-        businessCartHeaders: [
-          { text: 'Producer', value: 'producer' },
-          {
-            text: 'Product Title',
-            align: 'left',
-            sortable: false,
-            value: 'productName',
-          },
-          { text: 'Brutto', value: 'businessCustomerBrutto' },
-          { text: 'Netto', value: 'businessCustomerNetto' },
-          { text: 'Amount', value: 'amount' },
-          { text: 'Action', value: 'action' },
-        ],
         businessHeaders: [
           { text: 'Producer', value: 'producer' },
           {

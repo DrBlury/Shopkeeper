@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Dashboard from '@/components/Dashboard'
-import Cart from "./components/Cart";
+import NewCustomer from '@/components/NewCustomer'
+import Cart from "@/components/Cart";
 
 Vue.use(Router);
 
@@ -12,6 +13,7 @@ const router = new Router({
         { path: '/', component: Dashboard },
         { path: '/cart', component: Cart },
         { path: '/login', component: Login },
+        { path: '/newCustomer', component: NewCustomer },
         { path: '/multipage',
             // a single route can define multiple named components
             // which will be rendered into <router-view>s with corresponding names.
