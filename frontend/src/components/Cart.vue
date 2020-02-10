@@ -3,7 +3,7 @@
     <div v-if='businessCustomer'>
       <v-card>
         <v-card-title>
-          <h2><b>Cart</b></h2>
+          <h2><b>Business Customer Cart</b></h2>
 
           <v-spacer></v-spacer>
           <b>All Brutto: {{ this.getAllBusinessBrutto(this.cart) }} €</b>
@@ -55,28 +55,18 @@
           <template v-slot:item.action="{ item }">
             <v-icon
                     small
-                    class="mr-2"
-                    @click="addProduct(item)"
-            >
-              edit
-            </v-icon>
-            <v-icon
-                    small
                     @click="removeProduct(item)"
             >
               delete
             </v-icon>
           </template>
         </v-data-table>
-
       </v-card>
     </div>
     <div v-else>
-
-
       <v-card>
         <v-card-title>
-          <h2><b>Cart</b></h2>
+          <h2><b>Private Customer Cart</b></h2>
 
           <v-spacer></v-spacer>
           <b>All Brutto: {{ this.getAllPrivateBrutto(this.cart) }} €</b>
@@ -128,13 +118,6 @@
           <template v-slot:item.action="{ item }">
             <v-icon
                     small
-                    class="mr-2"
-                    @click="addProduct(item)"
-            >
-              edit
-            </v-icon>
-            <v-icon
-                    small
                     @click="removeProduct(item)"
             >
               delete
@@ -154,6 +137,7 @@
       return {
         cart: [],
         cartItems: 0,
+        cartSearch: "",
         products: [],
         privateCartHeaders: [
           { text: 'Producer', value: 'producer' },
@@ -235,35 +219,6 @@
           }
         }
       },
-      addProduct (itemToAdd) {
-        var alreadyAdded = false;
-        //Add the item to cart at the frontend
-        for (var i = 0; i < this.cart.length; i++) {
-          if (this.cart[i].id == itemToAdd.id) {
-            this.cart[i].amount++;
-            alreadyAdded = true;
-          }
-        }
-        if (!alreadyAdded) {
-          this.cart.push({id: itemToAdd.id, amount: 1})
-        }
-        this.cartItems++;
-
-        Vue.axios.get(`/api/addToCart`, {
-          params: {
-            id : itemToAdd.id,
-            username: this.username,
-          }
-        }).then(response => {
-          // JSON responses are automatically parsed.
-          console.log(response.data)
-          this.response = response.data;
-        }).catch(e => {
-          this.errors.push(e)
-        })
-
-
-      },
       removeProduct (itemToRemove) {
         for (var i = 0; i < this.cart.length; i++) {
           if (this.cart[i].id == itemToRemove.id) {
@@ -292,19 +247,6 @@
       },
       event () {
         this.$eventHub.$emit('change');
-      },
-      sendToBackend () {
-        Vue.axios.get(`/api/addBook`, {
-          params: {
-            book: this.book
-          }
-        }).then(response => {
-          // JSON responses are automatically parsed.
-          this.response = response.data;
-          this.reloadTable();
-        }).catch(e => {
-          this.errors.push(e)
-        })
       },
     },
     beforeMount() {
