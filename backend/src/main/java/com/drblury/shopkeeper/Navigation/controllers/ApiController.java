@@ -61,22 +61,27 @@ public class ApiController {
     }
 
     //TODO make this endpoint decide on new sum of items. Add or remove an item? Maybe via parameter
-    @RequestMapping("/addToCart")
+    @RequestMapping("/modifyCart")
     public ShoppingCart addToCart( @RequestParam(value= "id") String itemId,
-    @RequestParam(value= "username") String username) {
+    @RequestParam(value= "username") String username, @RequestParam(value= "operation") String operation) {
         int id = Integer.parseInt(itemId);
         ShoppingCart cart = findCartByUsername(username);
         Map<Integer, Integer> productsInCart = cart.getProductList();
-
-        //If there is nothing in the cart, simply return the empty cart
-        if (productsInCart == null)
-            return cart;
 
         //Check if product is already in the cart
         if (productsInCart.containsKey(id)) {
             //If so, get the amount and add one
             int amount = productsInCart.get(id);
-            amount++;
+
+            if ("add".equals(operation)){
+                amount++;
+            }
+            else {
+                amount --;
+                if (amount <= 0) {
+                    productsInCart.remove(id);
+                }
+            }
             productsInCart.put(id, amount);
         } else {
             //Else add the product to the cart with amount of 1

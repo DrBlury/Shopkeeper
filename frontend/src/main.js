@@ -36,39 +36,48 @@ const store = new Vuex.Store({
         cartItems: 0,
         products: [],
         businessCustomer: false,
-        count: 0
+        count: 0,
+        activeCustomer: "",
+        response: "",
+        errors: [],
     },
     mutations: {
         setProducts (state, products) {
             state.products = products;
         },
-        switchCustomerType (state) {
+        changeCustomerType (state) {
             state.businessCustomer = !state.businessCustomer;
         },
-        addCartItem (state, itemToAdd) {
+        modifyCartItem (state, itemToAdd, username, operation) {
             var alreadyAdded = false;
             state.cartItems++;
             //Add the item to cart at the frontend
             for (var i = 0; i < state.cart.length; i++) {
                 if (state.cart[i].id == itemToAdd.id) {
-                    state.cart[i].amount++;
+                    if (operation === "add") {
+                        state.cart[i].amount++;
+                    } else {
+                        state.cart[i].amount--;
+                    }
                     alreadyAdded = true;
                 }
             }
             if (!alreadyAdded) {
                 state.cart.push({id: itemToAdd.id, amount: 1})
             }
-        },
-        removeCartItem (state, itemToRemove) {
-            for (var i = 0; i < state.cart.length; i++) {
-                if (state.cart[i].id === itemToRemove.id) {
-                    state.cart[i].amount--;
-                    state.cartItems--;
-                    if (state.cart[i].amount <= 0) {
-                        state.cart.splice(i, 1);
-                    }
+
+            Vue.axios.get(`/api/modifyCart`, {
+                params: {
+                    id : itemToAdd.id,
+                    username: username,
+                    operation: operation,
                 }
-            }
+            }).then(response => {
+                // JSON responses are automatically parsed.
+                state.response = response.data;
+            }).catch(e => {
+                state.errors.push(e)
+            })
         },
     }
 })

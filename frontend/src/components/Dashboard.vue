@@ -45,12 +45,7 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon class="mr-2" @click="addProduct(item)">
-              add
-            </v-icon>
-            <v-icon @click="removeProduct(item)">
-              delete
-            </v-icon>
+              <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
           </template>
 
         </v-data-table>
@@ -84,12 +79,7 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon
-                    class="mr-2"
-                    @click="addProduct(item)"
-            >
-              add
-            </v-icon>
+            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
           </template>
 
         </v-data-table>
@@ -132,9 +122,7 @@
 
         ],
         product: {name: "", price: ""},
-        username: "",
-        response: "",
-        errors: [],
+
         search: "",
         cartSearch: "",
     }},
@@ -146,21 +134,15 @@
           }
         }
       },
-      addProduct (itemToAdd) {
-        this.$store.commit('addCartItem', itemToAdd);
-
-        Vue.axios.get(`/api/addToCart`, {
-          params: {
-            id : itemToAdd.id,
-            username: this.username,
-          }
-        }).then(response => {
-          // JSON responses are automatically parsed.
-          console.log(response.data)
-          this.response = response.data;
-        }).catch(e => {
-          this.errors.push(e)
-        })
+      modifyCartItem (item, operation) {
+        this.$store.commit(
+                'modifyCartItem',
+                {
+                  item: item,
+                  customer: this.activeCustomer,
+                  operation: operation
+                }
+        );
       },
       getColor (stock) {
         if (stock > 5) return 'red'
@@ -181,6 +163,7 @@
         this.$eventHub.$emit('change');
       },
     },
+
     beforeMount() {
       this.reloadTable();
     },
@@ -196,6 +179,9 @@
       },
       businessCustomer () {
         return this.$store.state.businessCustomer
+      },
+      activeCustomer () {
+        return this.$store.state.activeCustomer
       },
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="cart">
-    <div v-if='this.$store.businessCustomer'>
+    <div v-if='this.businessCustomer'>
       <v-card>
         <v-card-title>
           <h2><b>Business Customer Cart</b></h2>
@@ -9,21 +9,11 @@
           <b>All Brutto: {{ this.getAllBusinessBrutto(this.cart) }} €</b>
           <v-spacer></v-spacer>
           <b>All Netto: {{ this.getAllBusinessNetto(this.cart) }} €</b>
-
-          <v-spacer></v-spacer>
-          <v-text-field
-                  v-model="cartSearch"
-                  append-icon="search"
-                  label="Search"
-                  single-line
-                  hide-details
-          ></v-text-field>
         </v-card-title>
 
         <v-data-table
                 :headers="this.businessCartHeaders"
                 :items="this.cart"
-                :search="search"
                 :items-per-page="5"
                 class="elevation-1"
         >
@@ -48,12 +38,8 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon
-                    small
-                    @click="removeProduct(item)"
-            >
-              delete
-            </v-icon>
+            <v-icon @click="modifyCartItem(item.id, 'remove')"> remove </v-icon>
+            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
           </template>
         </v-data-table>
       </v-card>
@@ -68,21 +54,11 @@
           <v-spacer></v-spacer>
           <b>All Netto: {{ this.getAllPrivateNetto(this.cart) }} €</b>
 
-          <v-spacer></v-spacer>
-          <v-text-field
-                  v-model="cartSearch"
-                  append-icon="search"
-                  label="Search"
-                  single-line
-                  hide-details
-          ></v-text-field>
-
         </v-card-title>
 
         <v-data-table
                 :headers="this.privateCartHeaders"
                 :items="this.cart"
-                :search="cartSearch"
                 :items-per-page="5"
                 class="elevation-1"
         >
@@ -107,12 +83,8 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon
-                    small
-                    @click="removeProduct(item)"
-            >
-              delete
-            </v-icon>
+            <v-icon @click="modifyCartItem(item.id, 'remove')"> remove </v-icon>
+            <v-icon @click="modifyCartItem(item.id, 'add')"> add </v-icon>
           </template>
         </v-data-table>
 
@@ -126,7 +98,6 @@
   export default {
     data() {
       return {
-        cartSearch: "",
         privateCartHeaders: [
           { text: 'Producer', value: 'producer' },
           {
@@ -158,6 +129,14 @@
         cartSearch: "",
     }},
     methods: {
+      findById (id) {
+        console.log("seaching by id:" + id);
+        for (var i = 0; i < this.products.length; i++) {
+          if (this.products[i].id === id) {
+            return this.products[i];
+          }
+        }
+      },
       checkout () {
         Vue.axios.get(`/api/generateInvoice`, {
           params: {}
@@ -167,6 +146,16 @@
         }).catch(e => {
           this.errors.push(e)
         })
+      },
+      modifyCartItem (item, operation) {
+        this.$store.commit(
+                'modifyCartItem',
+                {
+                  item: item,
+                  customer: this.activeCustomer,
+                  operation: operation
+                }
+        );
       },
       getAllPrivateNetto (cart) {
         var sum = 0;
@@ -196,16 +185,7 @@
         }
         return sum.toFixed(2);
       },
-      findById (id) {
-        for (var i = 0; i < this.products.length; i++) {
-          if (this.products[i].id == id) {
-            return this.products[i];
-          }
-        }
-      },
-      removeProduct (itemToRemove) {
-        this.$store.commit('removeCartItem', itemToRemove);
-      },
+
       getColor (stock) {
         if (stock > 5) return 'red'
         else if (stock > 10) return 'orange'
@@ -229,6 +209,9 @@
       },
       products () {
         return this.$store.state.products
+      },
+      activeCustomer () {
+        return this.$store.state.activeCustomer
       },
     }
   }

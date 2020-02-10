@@ -13,11 +13,6 @@
                 single-line
                 hide-details
         ></v-text-field>
-
-        <v-checkbox
-                v-model="businessCustomer"
-                :label="`Business customer`"
-        ></v-checkbox>
       </v-card-title>
 
       <v-data-table
