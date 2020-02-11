@@ -8,7 +8,7 @@
 
       <v-switch
               v-model="businessCustomer"
-              :label="`Business customer:`"
+              :label="`Business customer`"
       ></v-switch>
 
     </div>
