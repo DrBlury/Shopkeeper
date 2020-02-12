@@ -70,6 +70,7 @@ const store = new Vuex.Store({
             }
             if (!alreadyAdded) {
                 state.cart.push({item: change.item, amount: 1});
+                state.cartItems++;
             }
 
             Vue.axios.get(`/api/modifyCart`, {
