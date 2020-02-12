@@ -22,8 +22,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue);
 
-Vue.use(Vuex)
 import Vuex from "vuex";
+Vue.use(Vuex)
 
 Vue.config.productionTip = false;
 
@@ -32,6 +32,7 @@ Vue.prototype.$eventHub = new Vue();
 
 const store = new Vuex.Store({
     state: {
+        customers: [],
         cart: [],
         cartItems: 0,
         products: [],
@@ -44,6 +45,17 @@ const store = new Vuex.Store({
     mutations: {
         setProducts (state, products) {
             state.products = products;
+        },
+        addNewCustomer (state, customer) {
+            // Needs work to be done! A LOT
+            state.customers.push(customer)
+            store.commit('loadCart', state.customers.length-1);
+        },
+        loadCart(state, index) {
+            console.log(index);
+            console.log(state.customers[index]);
+            state.cart = state.customers[index].customer.cart;
+            state.activeCustomer = index;
         },
         changeCustomerType (state) {
             state.businessCustomer = !state.businessCustomer;

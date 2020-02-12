@@ -17,35 +17,30 @@
 
       <v-data-table
               :headers="this.cartListHeaders"
-              :items="this.cartList"
+              :items="this.customers"
               :search="cartSearch"
               :items-per-page="5"
               class="elevation-1"
       >
         <template v-slot:item.firstName="{ item }">
-          <b> {{ findById(item.id).firstName }} </b>
+          <b> {{ item.firstName }} </b>
         </template>
 
         <template v-slot:item.lastName="{ item }">
-          <b> {{ findById(item.id).lastName }} </b>
-        </template>
-
-
-        <template v-slot:item.amount="{ item }">
-          <v-chip>{{ item.amount }}</v-chip>
+          <b> {{ item.lastName }} </b>
         </template>
 
         <template v-slot:item.action="{ item }">
           <v-icon
                   small
                   class="mr-2"
-                  @click="loadCart(item)"
+                  @click="loadCustomer(item)"
           >
             edit
           </v-icon>
           <v-icon
                   small
-                  @click="deleteCart(item)"
+                  @click=""
           >
             delete
           </v-icon>
@@ -97,7 +92,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="dialog = false, createNewCustomer">Create</v-btn>
+              <v-btn color="blue darken-1" text @click="createNewCustomer">Create</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -114,7 +109,6 @@
       return {
         businessCustomer: false,
         cartSearch: "",
-        cartList: [],
         dialog: false,
         firstname: '',
         lastname: '',
@@ -136,35 +130,41 @@
             sortable: true,
             value: 'lastName',
           },
-          { text: 'Products in cart', value: 'cartCount' },
-          { text: 'Amount', value: 'amount' },
           { text: 'Action', value: 'action' },
         ],
       }
     },
     methods: {
       createNewCustomer () {
+        this.dialog = false;
         this.$store.commit(
-                'addNewCustomer',
-                {
-                  item: item,
-                  customer: {
-                    firstname: this.firstname,
-                    lastname: this.lastname,
-                    email: this.email,
-                    address: {streetname: this.streetname,
-                      number: this.number,
-                      zipcode: this.zipcode,
-                      city: this.city,
-                      country: this.country}
-                  },
-                }
+        'addNewCustomer',
+        {
+          customer: {
+            firstname: this.firstname,
+            lastname: this.lastname,
+            email: this.email,
+            address: {streetname: this.streetname,
+              number: this.number,
+              zipcode: this.zipcode,
+              city: this.city,
+              country: this.country},
+            cart: []
+          },
+          }
         );
-
+      },
+      loadCustomer (customer) {
+        this.$store.commit('loadCart', customer);
       },
       beforeMount() {
-        this.loadCarts();
+
       },
+      computed: {
+        customers() {
+          return this.$store.state.customers;
+        }
+      }
     }
   }
 </script>
