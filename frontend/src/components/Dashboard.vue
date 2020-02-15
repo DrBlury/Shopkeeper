@@ -45,7 +45,15 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-              <v-icon @click="modifyCartItem(item, 'add')"> add </v-icon>
+            <v-btn color="success" @click="modifyCartItem(item, 'add')">
+              <v-icon
+                      small
+                      class="mr-2"
+              >
+                add
+              </v-icon>
+              Add to cart
+            </v-btn>
           </template>
 
         </v-data-table>
@@ -79,7 +87,15 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item, 'add')"> add </v-icon>
+            <v-btn color="success" @click="modifyCartItem(item, 'add')">
+              <v-icon
+                      small
+                      class="mr-2"
+              >
+                add
+              </v-icon>
+              Add to cart
+            </v-btn>
           </template>
 
         </v-data-table>

@@ -47,8 +47,14 @@ const store = new Vuex.Store({
         setProducts (state, products) {
             state.products = products;
         },
-        addNewCustomer (state, customer) {
-            // Get the new customer ID
+        saveCustomer (state, customer) {
+            customer.id = 0;
+            var customerToBeStored = JSON.parse(JSON.stringify(customer))
+            state.customers.push(customerToBeStored);
+            store.commit('loadCart', 0);
+        },
+        createNewCustomer (state, customer) {
+            /// Get the new customer ID
             var highest = 0
             for (var i = 0; i < state.customers.length; i++) {
                 if (state.customers[i].id >= highest) {
@@ -58,16 +64,12 @@ const store = new Vuex.Store({
             customer.id = highest;
             var customerToBeStored = JSON.parse(JSON.stringify(customer))
             state.customers.push(customerToBeStored);
-
-            // Clear cart for new user
-            state.cart = [];
-            state.cartItems = 0;
-            state.activeCustomer = highest + 1;
+            store.commit('loadCart', highest);
         },
         deleteCustomer (state, id) {
             for (var i = 0; i < state.customers.length; i++) {
                 if (state.customers[i].id === id) {
-                    state.customers.splice(id, 1);
+                    state.customers.splice(i, 1);
                 }
             }
         },

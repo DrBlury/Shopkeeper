@@ -38,8 +38,12 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item.item, 'remove')"> remove </v-icon>
-            <v-icon @click="modifyCartItem(item.item, 'add')"> add </v-icon>
+            <v-btn @click="modifyCartItem(item.item, 'remove')">
+              <v-icon>remove</v-icon>
+            </v-btn>
+            <v-btn @click="modifyCartItem(item.item, 'add')">
+              <v-icon>add</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -83,8 +87,12 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon @click="modifyCartItem(item.item, 'remove')"> remove </v-icon>
-            <v-icon @click="modifyCartItem(item.item, 'add')"> add </v-icon>
+            <v-btn @click="modifyCartItem(item.item, 'remove')">
+              <v-icon>remove</v-icon>
+            </v-btn>
+            <v-btn @click="modifyCartItem(item.item, 'add')">
+              <v-icon>add</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
 

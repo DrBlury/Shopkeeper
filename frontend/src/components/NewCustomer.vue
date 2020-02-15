@@ -31,26 +31,19 @@
         </template>
 
         <template v-slot:item.action="{ item }">
-            <v-btn>
-              <v-icon
-                      small
-                      class="mr-2"
-                      @click="loadCustomer(item.id)"
-              >
-                add
-              </v-icon>
+          <div v-if='item.id != activeCustomer'>
+            <v-btn color="success" @click="loadCustomer(item.id)">
+              <v-icon>mdi-cached</v-icon>
               Load
             </v-btn>
-            <v-btn>
-              <v-icon
-                      small
-                      @click="deleteCustomer(item.id)"
-              >
-                delete
-              </v-icon>
+            <v-btn color="error" @click="deleteCustomer(item.id)">
+              <v-icon>delete</v-icon>
               Delete
             </v-btn>
-
+          </div>
+          <div v-else>
+            Currently loaded
+          </div>
 
         </template>
       </v-data-table>
@@ -58,55 +51,108 @@
     </v-card>
 
 
+    <div v-if="customers.length === 0">
+      <!-- SAVE THE CUSTOMER -->
+      <v-card>
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent max-width="600px">
+
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark v-on="on">Save Cart</v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title>
+                <span class="headline">Whom was the cart for? (customer of existing cart)</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="firstname" label="First name*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="lastname" label="Last name" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field v-model="email" label="Email"></v-text-field>
+                    </v-col>
+                    <v-card-title>
+                      <span class="headline">Address</span>
+                    </v-card-title>
+                    <v-col cols="12">
+                      <v-text-field v-model="streetname" label="Street name"></v-text-field>
+                      <v-text-field v-model="number" label="Number"></v-text-field>
+                      <v-text-field v-model="zipcode" label="Zipcode"></v-text-field>
+                      <v-text-field v-model="city" label="City"></v-text-field>
+                      <v-text-field v-model="country" label="Country"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="saveCustomer">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </v-card>
+    </div>
+    <div v-else>
+      <!-- SAVE THE CUSTOMER -->
+      <v-card>
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent max-width="600px">
+
+            <template v-slot:activator="{ on }">
+              <v-btn color="primary" dark v-on="on">Create New Cart</v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title>
+                <span class="headline">Whom is the cart for?</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="firstname" label="First name*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="lastname" label="Last name" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field v-model="email" label="Email"></v-text-field>
+                    </v-col>
+                    <v-card-title>
+                      <span class="headline">Address</span>
+                    </v-card-title>
+                    <v-col cols="12">
+                      <v-text-field v-model="streetname" label="Street name"></v-text-field>
+                      <v-text-field v-model="number" label="Number"></v-text-field>
+                      <v-text-field v-model="zipcode" label="Zipcode"></v-text-field>
+                      <v-text-field v-model="city" label="City"></v-text-field>
+                      <v-text-field v-model="country" label="Country"></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="createNewCustomer">Create</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </v-card>
+    </div>
 
 
-    <!-- CREATING A NEW CUSTOMER -->
-    <v-card>
-      <v-row justify="center">
-        <v-dialog v-model="dialog" persistent max-width="600px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">New customer</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Whom was the cart for? (customer of existing cart)</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="firstname" label="First name*" required></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="lastname" label="Last name" required></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field v-model="email" label="Email"></v-text-field>
-                  </v-col>
-                  <v-card-title>
-                    <span class="headline">Address</span>
-                  </v-card-title>
-                  <v-col cols="12">
-                    <v-text-field v-model="streetname" label="Street name"></v-text-field>
-                    <v-text-field v-model="number" label="Number"></v-text-field>
-                    <v-text-field v-model="zipcode" label="Zipcode"></v-text-field>
-                    <v-text-field v-model="city" label="City"></v-text-field>
-                    <v-text-field v-model="country" label="Country"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small>*indicates required field</small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="createNewCustomer">Create</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-row>
-
-    </v-card>
   </div>
 </template>
 
@@ -115,7 +161,6 @@
   export default {
     data() {
       return {
-        businessCustomer: false,
         cartSearch: "",
         dialog: false,
         firstname: '',
@@ -143,9 +188,9 @@
       }
     },
     methods: {
-      createNewCustomer() {
+      saveCustomer() {
         this.dialog = false;
-        this.$store.commit('addNewCustomer', {
+        this.$store.commit('saveCustomer', {
                   customer: {
                     firstname: this.firstname,
                     lastname: this.lastname,
@@ -158,6 +203,34 @@
                       country: this.country
                     },
                     cart: this.cart,
+                  }
+                }
+        )
+        // clear form
+        this.firstname = ''
+        this.lastname = ''
+        this.streetname = ''
+        this.number = ''
+        this.zipcode = ''
+        this.city = ''
+        this.country = ''
+        this.email = ''
+      },
+      createNewCustomer() {
+        this.dialog = false;
+        this.$store.commit('createNewCustomer', {
+                  customer: {
+                    firstname: this.firstname,
+                    lastname: this.lastname,
+                    email: this.email,
+                    address: {
+                      streetname: this.streetname,
+                      number: this.number,
+                      zipcode: this.zipcode,
+                      city: this.city,
+                      country: this.country
+                    },
+                    cart: [],
                   }
                 }
         )
@@ -191,6 +264,9 @@
       },
       cart () {
         return this.$store.state.cart;
+      },
+      activeCustomer () {
+        return this.$store.state.activeCustomer;
       }
     }
   }
