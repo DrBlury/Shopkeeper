@@ -38,24 +38,60 @@ const store = new Vuex.Store({
         products: [],
         businessCustomer: false,
         count: 0,
-        activeCustomer: "",
+        activeCustomer: 0,
         response: "",
         errors: [],
+        activeCustomerText: "",
     },
     mutations: {
         setProducts (state, products) {
             state.products = products;
         },
         addNewCustomer (state, customer) {
-            // Needs work to be done! A LOT
-            state.customers.push(customer)
-            store.commit('loadCart', state.customers.length-1);
+            // Get the new customer ID
+            var highest = 0
+            for (var i = 0; i < state.customers.length; i++) {
+                if (state.customers[i].id >= highest) {
+                    highest = state.customers[i].id + 1;
+                }
+            }
+            customer.id = highest;
+            var customerToBeStored = JSON.parse(JSON.stringify(customer))
+            state.customers.push(customerToBeStored);
+
+            // Clear cart for new user
+            state.cart = [];
+            state.cartItems = 0;
+            state.activeCustomer = highest + 1;
         },
-        loadCart(state, index) {
-            console.log(index);
-            console.log(state.customers[index]);
-            state.cart = state.customers[index].customer.cart;
-            state.activeCustomer = index;
+        deleteCustomer (state, id) {
+            for (var i = 0; i < state.customers.length; i++) {
+                if (state.customers[i].id === id) {
+                    state.customers.splice(id, 1);
+                }
+            }
+        },
+        loadCart(state, id) {
+            console.log("Loading cart:" + id);
+            state.cart = [];
+            state.cartItems = 0;
+                // Find the cart to be loaded
+                for (var i = 0; i < state.customers.length; i++) {
+                    if (state.customers[i].id === id) {
+                        // Overwrite the existing cart
+                        state.cart = state.customers[i].customer.cart;
+                        // Iterate over every item in the cart
+                        for (var j = 0; j < state.cart.length; j++) {
+                            state.cartItems += state.cart[j].amount;
+                        }
+                        state.activeCustomer = id;
+                        state.activeCustomerText = "Active Customer:\n"
+                            + state.customers[state.activeCustomer].customer.firstname
+                            + " "
+                            + state.customers[state.activeCustomer].customer.lastname
+
+                    }
+                }
         },
         changeCustomerType (state) {
             state.businessCustomer = !state.businessCustomer;

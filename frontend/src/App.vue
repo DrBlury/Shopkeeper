@@ -6,12 +6,18 @@
       <router-link to="/cart">            <v-btn color="green"> <b>Cart ({{ cartItems }})</b>               </v-btn></router-link> |
       <router-link to="/newCustomer">     <v-btn color="red">   <b>Change customer</b>    </v-btn></router-link> |
 
+      <v-card>
+        <v-card-title>
+          {{ activeCustomerText }}
+        </v-card-title>
+      </v-card>
       <v-switch
               v-model="businessCustomer"
               :label="`Business customer`"
       ></v-switch>
 
     </div>
+
     <keep-alive>
       <router-view class="view one" name="default"></router-view> 
     </keep-alive>
@@ -35,6 +41,15 @@ export default {
   computed: {
     cartItems () {
       return this.$store.state.cartItems
+    },
+    customers () {
+      return this.$store.state.customers
+    },
+    activeCustomer () {
+      return this.$store.state.activeCustomer
+    },
+    activeCustomerText () {
+      return this.$store.state.activeCustomerText
     },
     businessCustomer: {
       get () {

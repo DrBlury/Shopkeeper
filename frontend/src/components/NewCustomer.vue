@@ -23,27 +23,35 @@
               class="elevation-1"
       >
         <template v-slot:item.firstName="{ item }">
-          <b> {{ item.firstName }} </b>
+          <b> {{ item.customer.firstname }} </b>
         </template>
 
         <template v-slot:item.lastName="{ item }">
-          <b> {{ item.lastName }} </b>
+          <b> {{ item.customer.lastname }} </b>
         </template>
 
         <template v-slot:item.action="{ item }">
-          <v-icon
-                  small
-                  class="mr-2"
-                  @click="loadCustomer(item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-                  small
-                  @click=""
-          >
-            delete
-          </v-icon>
+            <v-btn>
+              <v-icon
+                      small
+                      class="mr-2"
+                      @click="loadCustomer(item.id)"
+              >
+                add
+              </v-icon>
+              Load
+            </v-btn>
+            <v-btn>
+              <v-icon
+                      small
+                      @click="deleteCustomer(item.id)"
+              >
+                delete
+              </v-icon>
+              Delete
+            </v-btn>
+
+
         </template>
       </v-data-table>
 
@@ -57,11 +65,11 @@
       <v-row justify="center">
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">Create new customer</v-btn>
+            <v-btn color="primary" dark v-on="on">New customer</v-btn>
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">Create a new customer</span>
+              <span class="headline">Whom was the cart for? (customer of existing cart)</span>
             </v-card-title>
             <v-card-text>
               <v-container>
@@ -135,35 +143,54 @@
       }
     },
     methods: {
-      createNewCustomer () {
+      createNewCustomer() {
         this.dialog = false;
-        this.$store.commit(
-        'addNewCustomer',
-        {
-          customer: {
-            firstname: this.firstname,
-            lastname: this.lastname,
-            email: this.email,
-            address: {streetname: this.streetname,
-              number: this.number,
-              zipcode: this.zipcode,
-              city: this.city,
-              country: this.country},
-            cart: []
-          },
-          }
-        );
+        this.$store.commit('addNewCustomer', {
+                  customer: {
+                    firstname: this.firstname,
+                    lastname: this.lastname,
+                    email: this.email,
+                    address: {
+                      streetname: this.streetname,
+                      number: this.number,
+                      zipcode: this.zipcode,
+                      city: this.city,
+                      country: this.country
+                    },
+                    cart: this.cart,
+                  }
+                }
+        )
+        // clear form
+        this.firstname = ''
+        this.lastname = ''
+        this.streetname = ''
+        this.number = ''
+        this.zipcode = ''
+        this.city = ''
+        this.country = ''
+        this.email = ''
       },
-      loadCustomer (customer) {
-        this.$store.commit('loadCart', customer);
+      loadCustomer(customerId) {
+        console.log("Loading customer:")
+        console.log(customerId);
+        this.$store.commit('loadCart', customerId);
+      },
+      deleteCustomer(customerId) {
+        console.log("Delete customer:")
+        console.log(customerId);
+        this.$store.commit('deleteCustomer', customerId);
       },
       beforeMount() {
 
       },
-      computed: {
-        customers() {
-          return this.$store.state.customers;
-        }
+    },
+    computed: {
+      customers () {
+        return this.$store.state.customers;
+      },
+      cart () {
+        return this.$store.state.cart;
       }
     }
   }

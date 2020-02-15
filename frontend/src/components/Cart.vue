@@ -183,6 +183,7 @@
         else if (stock > 10) return 'orange'
         else return 'green'
       },
+
       event () {
         this.$eventHub.$emit('change');
       },

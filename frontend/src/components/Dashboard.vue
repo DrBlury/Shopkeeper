@@ -93,7 +93,6 @@
   export default {
     data() {
       return {
-        cart: [],
         businessHeaders: [
           { text: 'Producer', value: 'producer' },
           {
@@ -170,9 +169,6 @@
       },
       products () {
         return this.$store.state.products
-      },
-      businessCustomer () {
-        return this.$store.state.businessCustomer
       },
       activeCustomer () {
         return this.$store.state.activeCustomer
