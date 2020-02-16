@@ -199,6 +199,10 @@
                   </v-btn>
                 </template>
               </v-data-table>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="customerLoading = false">Cancel</v-btn>
+              </v-card-actions>
             </v-card>
           </v-dialog>
         </v-row>
@@ -258,6 +262,7 @@
     },
     methods: {
       loadCustomer(customer) {
+        this.customerLoading = false;
         this.$store.commit('createNewCart', {
                   customer: {
                     firstname: customer.customer.firstname,
@@ -274,8 +279,7 @@
                   }
                 }
         );
-        this.businessCustomer.set(customer.customer.businessCustomer);
-        this.clearForm();
+        this.businessCustomer = customer.customer.businessCustomer;
       },
       saveCart() {
         this.dialog = false;
@@ -299,7 +303,7 @@
       },
       createNewCart() {
         this.dialog = false;
-        this.customerLoading = false;
+        this.businessCustomer = false;
         this.$store.commit('createNewCart', {
                   customer: {
                     firstname: this.firstname,

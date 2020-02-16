@@ -89,9 +89,9 @@ const store = new Vuex.Store({
                         }
                         state.activeCart = id;
                         state.activeCartText = "Active Cart:\n"
-                            + state.carts[state.activeCart].customer.firstname
+                            + state.carts[i].customer.firstname
                             + " "
-                            + state.carts[state.activeCart].customer.lastname
+                            + state.carts[i].customer.lastname
 
                     }
                 }
