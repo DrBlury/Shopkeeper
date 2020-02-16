@@ -21,7 +21,7 @@
                 :headers="this.businessHeaders"
                 :items="this.products"
                 :search="search"
-                :items-per-page="5"
+                :items-per-page="15"
                 class="elevation-1"
         >
           <template v-slot:item.producer="{ item }">
@@ -63,7 +63,7 @@
                 :headers="this.privateHeaders"
                 :items="this.products"
                 :search="search"
-                :items-per-page="5"
+                :items-per-page="15"
                 class="elevation-1"
         >
           <template v-slot:item.productName="{ item }">

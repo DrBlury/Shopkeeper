@@ -102,13 +102,13 @@
       </v-card>
     </div>
     <div v-else>
-      <!-- SAVE THE CUSTOMER -->
+      <!-- CREATE NEW CUSTOMER -->
       <v-card>
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent max-width="600px">
 
             <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark v-on="on">Create New Cart</v-btn>
+              <v-btn color="primary" dark v-on="on">Create Cart (New Customer)</v-btn>
             </template>
 
             <v-card>
@@ -148,8 +148,62 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+
+      <!-- CREATE NEW CUSTOMER -->
+          <v-dialog v-model="customerLoading" persistent max-width="600px">
+
+            <template v-slot:activator="{ on }">
+              <v-btn color="yellow" dark v-on="on">Create Cart (Existing Customer)</v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title>
+                <h2><b>Load Customer</b></h2>
+                <v-spacer></v-spacer>
+                <v-text-field
+                        v-model="customerSearch"
+                        append-icon="search"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
+              </v-card-title>
+
+              <v-data-table
+                      :headers="this.customerHeaders"
+                      :items="this.customerTemplates"
+                      :search="customerSearch"
+                      :items-per-page="5"
+                      class="elevation-1"
+              >
+                <template v-slot:item.firstName="{ item }">
+                  <b> {{ item.customer.firstname }} </b>
+                </template>
+
+                <template v-slot:item.lastName="{ item }">
+                  <b> {{ item.customer.lastname }} </b>
+                </template>
+
+                <template v-slot:item.businessCustomer="{ item }">
+                  <b> {{ item.customer.businessCustomer }} </b>
+                </template>
+
+                <template v-slot:item.discount="{ item }">
+                  <b> {{ item.customer.discount }} </b>
+                </template>
+
+                <template v-slot:item.action="{ item }">
+                  <v-btn color="success" @click="loadCustomer(item)">
+                    <v-icon>mdi-cached</v-icon>
+                    Load
+                  </v-btn>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-dialog>
         </v-row>
       </v-card>
+
     </div>
 
 
@@ -161,8 +215,23 @@
   export default {
     data() {
       return {
+        customerSearch: "",
+        customerHeaders: [
+          { text: 'First name', value: 'firstName' },
+          {
+            text: 'Last name',
+            align: 'left',
+            sortable: true,
+            value: 'lastName',
+          },
+          { text: 'Discount', value: 'discount' },
+          { text: 'Business Customer', value: 'businessCustomer' },
+          { text: 'Action', value: 'action' },
+        ],
+
         cartSearch: "",
         dialog: false,
+        customerLoading: false,
         firstname: '',
         lastname: '',
         streetname: '',
@@ -188,6 +257,26 @@
       }
     },
     methods: {
+      loadCustomer(customer) {
+        this.$store.commit('createNewCart', {
+                  customer: {
+                    firstname: customer.customer.firstname,
+                    lastname: customer.customer.lastname,
+                    email: customer.customer.email,
+                    address: {
+                      streetname: customer.customer.streetname,
+                      number: customer.customer.number,
+                      zipcode: customer.customer.zipcode,
+                      city: customer.customer.city,
+                      country: customer.customer.country
+                    },
+                    cart: [],
+                  }
+                }
+        );
+        this.businessCustomer.set(customer.customer.businessCustomer);
+        this.clearForm();
+      },
       saveCart() {
         this.dialog = false;
         this.$store.commit('saveCart', {
@@ -210,6 +299,7 @@
       },
       createNewCart() {
         this.dialog = false;
+        this.customerLoading = false;
         this.$store.commit('createNewCart', {
                   customer: {
                     firstname: this.firstname,
@@ -250,6 +340,9 @@
       },
     },
     computed: {
+      customerTemplates () {
+        return this.$store.state.customerTemplates
+      },
       carts () {
         return this.$store.state.carts;
       },
@@ -258,7 +351,15 @@
       },
       activeCart () {
         return this.$store.state.activeCart;
-      }
+      },
+      businessCustomer: {
+        get () {
+          return this.$store.state.businessCustomer
+        },
+        set (value) {
+          this.$store.commit('changeCustomerType', value)
+        }
+      },
     }
   }
 </script>

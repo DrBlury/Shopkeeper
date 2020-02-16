@@ -32,6 +32,7 @@ Vue.prototype.$eventHub = new Vue();
 
 const store = new Vuex.Store({
     state: {
+        customerTemplates: [],
         carts: [],
         cart: [],
         cartItems: 0,
@@ -53,17 +54,17 @@ const store = new Vuex.Store({
             state.carts.push(customerToBeStored);
             store.commit('loadCart', 0);
         },
-        createNewCart (state, customer) {
-            /// Get the new customer ID
+        createNewCart (state, cart) {
+            /// Get the new cart ID
             let highest = 0
             for (let i = 0; i < state.carts.length; i++) {
                 if (state.carts[i].id >= highest) {
                     highest = state.carts[i].id + 1;
                 }
             }
-            customer.id = highest;
-            let customerToBeStored = JSON.parse(JSON.stringify(customer))
-            state.carts.push(customerToBeStored);
+            cart.id = highest;
+            let cartToBeStored = JSON.parse(JSON.stringify(cart))
+            state.carts.push(cartToBeStored);
             store.commit('loadCart', highest);
         },
         deleteCart (state, id) {
@@ -97,6 +98,27 @@ const store = new Vuex.Store({
         },
         changeCustomerType (state) {
             state.businessCustomer = !state.businessCustomer;
+        },
+        createNewCustomer (state, customer) {
+            /// Get the new customer ID
+            let highest = 0;
+            for (let i = 0; i < state.customerTemplates.length; i++) {
+                if (state.customerTemplates[i].id >= highest) {
+                    highest = state.customerTemplates[i].id + 1;
+                }
+            }
+            customer.id = highest;
+            let customerToBeStored = JSON.parse(JSON.stringify(customer))
+            state.customerTemplates.push(customerToBeStored);
+        },
+        updateCustomer (state, customer) {
+            console.log(customer.id)
+            for (let i = 0; i < state.customerTemplates.length; i++) {
+                if (state.customerTemplates[i].id === customer.id) {
+                    state.customerTemplates.splice(i, 1);
+                }
+            }
+            store.commit('createNewCustomer', customer);
         },
         modifyCartItem (state, change) {
             let alreadyAdded = false;
