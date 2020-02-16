@@ -49,25 +49,25 @@ const store = new Vuex.Store({
         },
         saveCustomer (state, customer) {
             customer.id = 0;
-            var customerToBeStored = JSON.parse(JSON.stringify(customer))
+            let customerToBeStored = JSON.parse(JSON.stringify(customer))
             state.customers.push(customerToBeStored);
             store.commit('loadCart', 0);
         },
         createNewCustomer (state, customer) {
             /// Get the new customer ID
-            var highest = 0
-            for (var i = 0; i < state.customers.length; i++) {
+            let highest = 0
+            for (let i = 0; i < state.customers.length; i++) {
                 if (state.customers[i].id >= highest) {
                     highest = state.customers[i].id + 1;
                 }
             }
             customer.id = highest;
-            var customerToBeStored = JSON.parse(JSON.stringify(customer))
+            let customerToBeStored = JSON.parse(JSON.stringify(customer))
             state.customers.push(customerToBeStored);
             store.commit('loadCart', highest);
         },
         deleteCustomer (state, id) {
-            for (var i = 0; i < state.customers.length; i++) {
+            for (let i = 0; i < state.customers.length; i++) {
                 if (state.customers[i].id === id) {
                     state.customers.splice(i, 1);
                 }
@@ -78,12 +78,12 @@ const store = new Vuex.Store({
             state.cart = [];
             state.cartItems = 0;
                 // Find the cart to be loaded
-                for (var i = 0; i < state.customers.length; i++) {
+                for (let i = 0; i < state.customers.length; i++) {
                     if (state.customers[i].id === id) {
                         // Overwrite the existing cart
                         state.cart = state.customers[i].customer.cart;
                         // Iterate over every item in the cart
-                        for (var j = 0; j < state.cart.length; j++) {
+                        for (let j = 0; j < state.cart.length; j++) {
                             state.cartItems += state.cart[j].amount;
                         }
                         state.activeCustomer = id;
@@ -99,10 +99,10 @@ const store = new Vuex.Store({
             state.businessCustomer = !state.businessCustomer;
         },
         modifyCartItem (state, change) {
-            var alreadyAdded = false;
+            let alreadyAdded = false;
 
             //Add the item to cart at the frontend
-            for (var i = 0; i < state.cart.length; i++) {
+            for (let i = 0; i < state.cart.length; i++) {
                 if (state.cart[i].item.id === change.item.id) {
                     if (change.operation === "add") {
                         state.cart[i].amount++;

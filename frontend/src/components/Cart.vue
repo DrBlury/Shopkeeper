@@ -158,29 +158,29 @@
         );
       },
       getAllPrivateNetto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
+        let sum = 0;
+        for (let i = 0; i < cart.length; i++) {
           sum += cart[i].item.privateCustomerNetto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllPrivateBrutto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
+        let sum = 0;
+        for (let i = 0; i < cart.length; i++) {
           sum += cart[i].item.privateCustomerBrutto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllBusinessNetto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
+        let sum = 0;
+        for (let i = 0; i < cart.length; i++) {
           sum += cart[i].item.businessCustomerNetto * cart[i].amount;
         }
         return sum.toFixed(2);
       },
       getAllBusinessBrutto (cart) {
-        var sum = 0;
-        for (var i = 0; i < cart.length; i++) {
+        let sum = 0;
+        for (let i = 0; i < cart.length; i++) {
           sum += cart[i].item.businessCustomerBrutto * cart[i].amount;
         }
         return sum.toFixed(2);

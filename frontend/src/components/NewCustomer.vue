@@ -206,15 +206,7 @@
                   }
                 }
         )
-        // clear form
-        this.firstname = ''
-        this.lastname = ''
-        this.streetname = ''
-        this.number = ''
-        this.zipcode = ''
-        this.city = ''
-        this.country = ''
-        this.email = ''
+        this.clearForm();
       },
       createNewCustomer() {
         this.dialog = false;
@@ -234,6 +226,9 @@
                   }
                 }
         )
+        this.clearForm();
+      },
+      clearForm() {
         // clear form
         this.firstname = ''
         this.lastname = ''
