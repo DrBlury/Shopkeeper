@@ -32,44 +32,44 @@ Vue.prototype.$eventHub = new Vue();
 
 const store = new Vuex.Store({
     state: {
-        customers: [],
+        carts: [],
         cart: [],
         cartItems: 0,
         products: [],
         businessCustomer: false,
         count: 0,
-        activeCustomer: 0,
+        activeCart: 0,
         response: "",
         errors: [],
-        activeCustomerText: "",
+        activeCartText: "",
     },
     mutations: {
         setProducts (state, products) {
             state.products = products;
         },
-        saveCustomer (state, customer) {
+        saveCart (state, customer) {
             customer.id = 0;
             let customerToBeStored = JSON.parse(JSON.stringify(customer))
-            state.customers.push(customerToBeStored);
+            state.carts.push(customerToBeStored);
             store.commit('loadCart', 0);
         },
-        createNewCustomer (state, customer) {
+        createNewCart (state, customer) {
             /// Get the new customer ID
             let highest = 0
-            for (let i = 0; i < state.customers.length; i++) {
-                if (state.customers[i].id >= highest) {
-                    highest = state.customers[i].id + 1;
+            for (let i = 0; i < state.carts.length; i++) {
+                if (state.carts[i].id >= highest) {
+                    highest = state.carts[i].id + 1;
                 }
             }
             customer.id = highest;
             let customerToBeStored = JSON.parse(JSON.stringify(customer))
-            state.customers.push(customerToBeStored);
+            state.carts.push(customerToBeStored);
             store.commit('loadCart', highest);
         },
-        deleteCustomer (state, id) {
-            for (let i = 0; i < state.customers.length; i++) {
-                if (state.customers[i].id === id) {
-                    state.customers.splice(i, 1);
+        deleteCart (state, id) {
+            for (let i = 0; i < state.carts.length; i++) {
+                if (state.carts[i].id === id) {
+                    state.carts.splice(i, 1);
                 }
             }
         },
@@ -78,19 +78,19 @@ const store = new Vuex.Store({
             state.cart = [];
             state.cartItems = 0;
                 // Find the cart to be loaded
-                for (let i = 0; i < state.customers.length; i++) {
-                    if (state.customers[i].id === id) {
+                for (let i = 0; i < state.carts.length; i++) {
+                    if (state.carts[i].id === id) {
                         // Overwrite the existing cart
-                        state.cart = state.customers[i].customer.cart;
+                        state.cart = state.carts[i].customer.cart;
                         // Iterate over every item in the cart
                         for (let j = 0; j < state.cart.length; j++) {
                             state.cartItems += state.cart[j].amount;
                         }
-                        state.activeCustomer = id;
-                        state.activeCustomerText = "Active Customer:\n"
-                            + state.customers[state.activeCustomer].customer.firstname
+                        state.activeCart = id;
+                        state.activeCartText = "Active Cart:\n"
+                            + state.carts[state.activeCart].customer.firstname
                             + " "
-                            + state.customers[state.activeCustomer].customer.lastname
+                            + state.carts[state.activeCart].customer.lastname
 
                     }
                 }

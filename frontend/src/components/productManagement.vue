@@ -1,5 +1,5 @@
 <template>
-  <div class="newCustomer">
+  <div class="productManagement">
     <!-- SHOW ALL CARTS-->
 
     <v-card>
@@ -17,7 +17,7 @@
 
       <v-data-table
               :headers="this.cartListHeaders"
-              :items="this.carts"
+              :items="this.customers"
               :search="cartSearch"
               :items-per-page="5"
               class="elevation-1"
@@ -31,12 +31,12 @@
         </template>
 
         <template v-slot:item.action="{ item }">
-          <div v-if='item.id != activeCart'>
-            <v-btn color="success" @click="loadCart(item.id)">
+          <div v-if='item.id != activeCustomer'>
+            <v-btn color="success" @click="loadCustomer(item.id)">
               <v-icon>mdi-cached</v-icon>
               Load
             </v-btn>
-            <v-btn color="error" @click="deleteCart(item.id)">
+            <v-btn color="error" @click="deleteCustomer(item.id)">
               <v-icon>delete</v-icon>
               Delete
             </v-btn>
@@ -51,7 +51,7 @@
     </v-card>
 
 
-    <div v-if="carts.length === 0">
+    <div v-if="customers.length === 0">
       <!-- SAVE THE CUSTOMER -->
       <v-card>
         <v-row justify="center">
@@ -94,7 +94,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="saveCart">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="saveCustomer">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -144,7 +144,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="createNewCart">Create</v-btn>
+                <v-btn color="blue darken-1" text @click="createNewCustomer">Create</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -188,9 +188,9 @@
       }
     },
     methods: {
-      saveCart() {
+      saveCustomer() {
         this.dialog = false;
-        this.$store.commit('saveCart', {
+        this.$store.commit('saveCustomer', {
                   customer: {
                     firstname: this.firstname,
                     lastname: this.lastname,
@@ -208,9 +208,9 @@
         )
         this.clearForm();
       },
-      createNewCart() {
+      createNewCustomer() {
         this.dialog = false;
-        this.$store.commit('createNewCart', {
+        this.$store.commit('createNewCustomer', {
                   customer: {
                     firstname: this.firstname,
                     lastname: this.lastname,
@@ -239,25 +239,29 @@
         this.country = ''
         this.email = ''
       },
-      loadCart(customerId) {
+      loadCustomer(customerId) {
+        console.log("Loading customer:")
+        console.log(customerId);
         this.$store.commit('loadCart', customerId);
       },
-      deleteCart(customerId) {
-        this.$store.commit('deleteCart', customerId);
+      deleteCustomer(customerId) {
+        console.log("Delete customer:")
+        console.log(customerId);
+        this.$store.commit('deleteCustomer', customerId);
       },
       beforeMount() {
 
       },
     },
     computed: {
-      carts () {
-        return this.$store.state.carts;
+      customers () {
+        return this.$store.state.customers;
       },
       cart () {
         return this.$store.state.cart;
       },
-      activeCart () {
-        return this.$store.state.activeCart;
+      activeCustomer () {
+        return this.$store.state.activeCustomer;
       }
     }
   }
