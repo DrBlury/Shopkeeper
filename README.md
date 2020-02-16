@@ -18,14 +18,14 @@ At the end of the day you are also able to print invoices or other kinds of docu
 - Loads products into H2 in memory database for speed
 
 ## __**TODO**__
-- ~~Add a switch cart list with carts that are already stored at the backend
-- ~~Allow switching of carts
+- ~~Add a switch cart list with carts that are already stored at the backend~~
+- ~~Allow switching of carts~~
 - Create LaTeX reader/compiler in the project with some templates
-- ~~Create customer form
-- ~~Create customer database for recurring customers
+- ~~Create customer form~~
+- ~~Create customer database for recurring customers~~
 - Allow product images to be shown in the product list
 - Dynamically load images in the list
-- ~~Refactor front-end code (split carting system from productlist)
-- ~~Add a Vuex Store to store the product data in the frontend after the first loading
+- ~~Refactor front-end code (split carting system from productlist)~~
+- ~~Add a Vuex Store to store the product data in the frontend after the first loading~~
 - Add a reload from excel button to allow changes to the Excel sheet "on the fly"
 - Add a site that allows you to create new products with image upload
